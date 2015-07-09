@@ -1,37 +1,30 @@
 class Solution {
 public:
-    vector<int> leftzag(vector<TreeNode *> record,vector<TreeNode *>& newrecord){
-        vector<int> ret;
-        vector<TreeNode *>::iterator it;
-        for(int i=0;i<record.size();i++){
-            if(record[i]->left){
-                ret.push_back(record[i]->left->val);
-                newrecord.push_back(record[i]->left);
-            }
-            if(record[i]->right){
-                ret.push_back(record[i]->right->val);
-                newrecord.push_back(record[i]->right);
-            }
-            
-        }        return ret;
-    }
     vector<vector<int>> levelOrder(TreeNode* root) {
         vector<vector<int>> ret{};
+        vector<int> nums;
         if(!root)
             return ret;
-        vector<TreeNode *>record,newrecord;
-        vector<int> nums;
-        nums.push_back(root->val);
-        record.push_back(root);
-        while(!record.empty()){
-            newrecord.clear();
-            ret.push_back(nums);
-            nums=leftzag(record,newrecord);
-            record=newrecord;
+        deque<TreeNode *> d;
+        d.push_back(root);
+        d.push_back(NULL);
+        while(!d.empty()){
+            TreeNode *t=d.front();
+            d.pop_front();
+            if(t==NULL){
+                ret.push_back(nums);
+                nums.clear();
+                if(!d.empty())
+                    d.push_back(NULL);
+            }
+            else{
+                nums.push_back(t->val);
+                if(t->left) d.push_back(t->left);
+                if(t->right) d.push_back(t->right);
+                
+            }
         }
         return ret;
-
-        
-        
+  
     }
 };
